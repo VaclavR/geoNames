@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('geonames App', () => {
+describe('countries App', () => {
   let page: AppPage;
 
   beforeEach(() => {

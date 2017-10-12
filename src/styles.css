@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #06060c;
+  color: white;
+}
+a {
+  cursor: pointer;
+}
+
+.spinner {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.spinner i {
+  color: white;
+  margin: 0 auto;
+}

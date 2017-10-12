@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a style="color: white" class="navbar-brand" routerLink="/">Home</a>
+  <button class="navbar-toggler" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0"
+          [formGroup]="searchForm" (ngSubmit)="onSearch()"
+          *ngIf="countries">
+      <input  formControlName="country"
+              (change)="onSearch()"
+              (input)="onInput()"
+              autofocus
+              class="form-control mr-sm-2"
+              type="text"
+              [placeholder]=placeholder
+              aria-label="Search"
+              [typeahead]="countries"
+              typeaheadOptionField="countryName"
+              typeaheadGroupField="continentName">
+      <button class="btn btn-outline-success my-2 my-sm-0"
+              [ngClass]="{disabled: searchForm.invalid}"
+              [disabled]="searchForm.invalid"
+              type="submit">
+        Search
+      </button>
+    </form>
+  </div>
+</nav>

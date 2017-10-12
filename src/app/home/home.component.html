@@ -1,0 +1,150 @@
+<br>
+<div class="container" *ngIf="!countries && !isLoading">
+  <div class="jumbotron bg-primary text-center">
+    <h1 class="display-3">GeoNames</h1>
+    <p class="lead">Basic informations about countries</p>
+    <hr class="my-4">
+    <p>You can search a specific country in the top right box or you can display a table of all countries.</p>
+    <p>In country page you can click on the national flag and a wikipedia page will be opened in a new tab.</p>
+    <p>You can also click on the map picture and a googlemaps page will be opened in a new tab.</p>
+    <p class="lead">
+      <button class="btn btn-info btn-lg" role="button" (click)="onEngage()">Load All Countries</button>
+    </p>
+  </div>
+</div>
+
+<div class="container-fluid">
+
+  <!-- Spinner -->
+  <div class="spinner" *ngIf="isLoading">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+
+  <!-- Filters menu -->
+  <div *ngIf="countries">
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-group">
+          <div class="btn-group" dropdown *ngFor="let filter of filters">
+            <button dropdownToggle type="button" class="btn btn-dark dropdown-toggle">
+              {{ filter.item }} <span class="caret"></span>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu">
+              <li role="menuitem" *ngFor="let subItem of filter.subItems; let i = index">
+                <a *ngIf="subItem !== 'custom range'"
+                   class="dropdown-item"
+                   (click)="filterBy({index: i, category: filter.item})">
+                  {{ subItem }}
+                </a>
+                <input class="dropdown-item"
+                       *ngIf="subItem == 'custom range'"
+                       type="range">
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <ul class="list-inline">
+          <li class="list-inline-item" *ngFor="let filter of activeFilters; let i = index">
+            <sub><i *ngIf="i > 0">| &nbsp;</i>{{ filter }}<i *ngIf="i === 2 && filter !== 'all'"> Km<sup>2</sup></i></sub>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="table table-sm table-inverse table-hover table-striped">
+      <thead>
+      <tr class="headings">
+        <th>#</th>
+        <th>
+          <a (click)="toggleSortBy('countryName')">
+            Country
+            <span *ngIf="showSortArrow.countryName">
+              <i *ngIf="sortService.sortDirectionAZ.countryName" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="!sortService.sortDirectionAZ.countryName" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('continentName')">
+            Continent
+            <span *ngIf="showSortArrow.continentName">
+              <i *ngIf="sortService.sortDirectionAZ.continentName" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="!sortService.sortDirectionAZ.continentName" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('capital')">
+            Capital
+            <span *ngIf="showSortArrow.capital">
+              <i *ngIf="sortService.sortDirectionAZ.capital" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="!sortService.sortDirectionAZ.capital" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('density')">
+            Density
+            <span *ngIf="showSortArrow.density">
+              <i *ngIf="!sortService.sortDirection09.density" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="sortService.sortDirection09.density" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('currencyCode')">
+            Currency
+            <span *ngIf="showSortArrow.currencyCode">
+              <i *ngIf="sortService.sortDirectionAZ.currencyCode" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="!sortService.sortDirectionAZ.currencyCode" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('population')">
+            Population
+            <span *ngIf="showSortArrow.population">
+              <i *ngIf="!sortService.sortDirection09.population" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="sortService.sortDirection09.population" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+        <th>
+          <a (click)="toggleSortBy('areaInSqKm')">
+            Mass
+            <span *ngIf="showSortArrow.areaInSqKm">
+              <i *ngIf="!sortService.sortDirection09.areaInSqKm" class="fa fa-sort-desc" aria-hidden="true"></i>
+              <i *ngIf="sortService.sortDirection09.areaInSqKm" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </span>
+          </a>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of currentList; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <a class="detail-link" routerLink="/country/{{item.countryCode | lowercase}}">
+            <span style="width: 25px; display: inline-block">
+            <img style="width: 100%"
+                 src="http://www.geonames.org/flags/m/{{ item.countryCode | lowercase }}.png">
+          </span>
+            &nbsp;
+            {{ item.countryName }}
+          </a>
+        </td>
+        <td>{{ item.continentName }}</td>
+        <td>{{ item.capital }}</td>
+        <td>{{ item.population / item.areaInSqKm | number:'1.0-2' }}
+          <i class="fa fa-child" aria-hidden="true"></i>/Km<sup>2</sup>
+        </td>
+        <td>{{ item.currencyCode }}</td>
+        <td>{{ item.population | number }}</td>
+        <td>{{ item.areaInSqKm | number }} Km<sup>2</sup></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

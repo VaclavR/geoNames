@@ -1,0 +1,12 @@
+h1 {
+  color: white;
+}
+
+img {
+  max-height: 400px;
+}
+
+img.map {
+  min-width: 50px;
+  background-color: #fff;
+}
