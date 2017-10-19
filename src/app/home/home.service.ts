@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Country } from '../Shared/country.model';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class HomeService {
@@ -12,23 +12,29 @@ export class HomeService {
   countries: Country[];
   currentList: Country[];
 
-  constructor(private http: Http) { }
+  constructor(private httpClient: HttpClient) { }
 
   getData(): Observable<Country[]> {
-    return this.http.get(this.url)
+    return this.httpClient.get<any[]>(this.url, {
+      observe: 'body',
+      responseType: 'json'
+    })
       .map(
         (data) => {
-          this.countries = data.json().geonames;
-          return data.json().geonames;
+          console.log(data);
+          this.countries = data['geonames'];
+          return data['geonames'];
         }
       );
   }
 
   getCountryDetail(countryCode: string): Observable<Country> {
-    return this.http.get(`${this.url}&country=${countryCode}`)
+    return this.httpClient.get<any[]>(this.url + '&country=' + countryCode)
       .map(
-        (data) => {
-          return data.json().geonames[0];
+        (response) => {
+          console.log(response);
+          console.log('Return Countries');
+          return response['geonames'][0];
         }
       );
   }
