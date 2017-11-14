@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import { Country } from '../Shared/country.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
+import { Country } from '../Shared/country.model';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class HomeService {
@@ -12,35 +12,25 @@ export class HomeService {
   private url = 'http://api.geonames.org/countryInfoJSON?';
   countries: Country[];
   currentList: Country[];
+  countryCode: string;
+  currentCountryId: number;
+  home: boolean;
 
   constructor(private httpClient: HttpClient) { }
 
   getData(): Observable<Country[]> {
-    const req = new HttpRequest('GET', this.url, {
-      reportProgress: true,
+    return this.httpClient.get<any[]>(this.url, {
+      observe: 'body',
+      responseType: 'json',
       params: new HttpParams().set('username', 'vencator')
-    });
-    return this.httpClient.request(req)
-    // return this.httpClient.get<any[]>(this.url, {
-    //   observe: 'body',
-    //   responseType: 'json',
-    //   params: new HttpParams().set('username', 'vencator')
-    // })
-      .do(data =>  {
-        if(data.type === 3) {
-          console.log(data['loaded']);
-        }
-      })
-      .debounceTime(100)
+    })
       .map(
-        (data) => {
-          this.countries = data['body'].geonames;
-          return data['body'].geonames;
+        (data: any) => {
+          this.countries = data.geonames;
+          return data.geonames;
         }
       );
   }
-
-
 
   getCountryDetail(countryCode: string): Observable<Country> {
     let params = new HttpParams();
@@ -48,15 +38,20 @@ export class HomeService {
     params = params.append('country', countryCode);
     return this.httpClient.get<any[]>(this.url, {
       params: params
-      // params: new HttpParams().set('username', 'vencator').set('country', countryCode)
     })
       .map(
         (response) => {
-          console.log(response);
-          console.log('Return Countries');
           return response['geonames'][0];
         }
       );
+  }
+
+  getIndexOfCountry(countryCode: string) {
+    if (this.countries) {
+      return this.countries.findIndex((country: Country) => {
+        return country.countryCode === countryCode;
+      });
+    }
   }
 
   returnCountries(): Country[] {
@@ -65,8 +60,26 @@ export class HomeService {
 
   returnCountry(countryCode: string) {
     const detailCountry: Country[] = this.countries.filter((country: Country) => {
-      return countryCode === country.countryCode;
+      return countryCode.toUpperCase() === country.countryCode;
     });
     return detailCountry[0];
+  }
+
+  returnNextOrPrevCountry(direction: string) {
+    if (direction === 'prev') {
+      if (this.currentCountryId === 0) {
+        this.countryCode = this.countries[this.countries.length - 1].countryCode;
+      } else {
+        this.countryCode = this.countries[this.currentCountryId - 1].countryCode;
+      }
+    }
+    if (direction === 'next') {
+      if (this.currentCountryId + 1 === this.countries.length) {
+        this.countryCode = this.countries[0].countryCode;
+      } else {
+        this.countryCode = this.countries[this.currentCountryId + 1].countryCode;
+      }
+    }
+    this.searchEmitted.next(this.countryCode);
   }
 }

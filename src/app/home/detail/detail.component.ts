@@ -1,5 +1,5 @@
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { HomeService } from '../home.service';
 import { Country } from '../../Shared/country.model';
 import { Subscription } from 'rxjs/Subscription';
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class DetailComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   country: Country;
+  countryCode: string;
   wikilizedCountryName: string;
   errorMessage: string;
 
@@ -31,9 +32,20 @@ export class DetailComponent implements OnInit, OnDestroy {
               private homeService: HomeService) { }
 
   ngOnInit() {
-    const countryCode = this.route.snapshot.params['id'].toUpperCase();
+    this.homeService.home = false;
+    this.route.params.subscribe((params: Params) => {
+      this.countryCode = params.id.toUpperCase();
+      if (this.homeService.countries) {
+        this.homeService.currentCountryId = this.homeService.getIndexOfCountry(this.countryCode);
+      } else {
+        setTimeout(() => {
+          this.homeService.currentCountryId = this.homeService.getIndexOfCountry(this.countryCode);
+        }, 400);
+      }
+    });
+    // const countryCode = this.route.snapshot.params['id'].toUpperCase();
     this.subscription = this.homeService.searchEmitted
-      .subscribe((cc) => {
+      .subscribe((cc: string) => {
         if (this.homeService.currentList) {
           this.country = this.homeService.returnCountry(cc);
           this.wikilizedCountryName = this.country.countryName.replace(/[ [\]]/g, this.replacer);
@@ -47,15 +59,16 @@ export class DetailComponent implements OnInit, OnDestroy {
       });
 
     if (this.homeService.currentList) {
-      this.country = this.homeService.returnCountry(countryCode);
+      this.country = this.homeService.returnCountry(this.countryCode);
       this.wikilizedCountryName = this.country.countryName.replace(/[ [\]]/g, this.replacer);
     } else {
-      this.homeService.getCountryDetail(countryCode)
+      this.homeService.getCountryDetail(this.countryCode)
         .subscribe((country: Country) => {
         this.country = country;
         this.wikilizedCountryName = this.country.countryName.replace(/[ [\]]/g, this.replacer);
         });
     }
+
   }
 
   ngOnDestroy() {

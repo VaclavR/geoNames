@@ -1,3 +1,7 @@
 .disabled:hover {
   cursor: not-allowed;
 }
+
+a.arrow:hover {
+  color: chartreuse;
+}

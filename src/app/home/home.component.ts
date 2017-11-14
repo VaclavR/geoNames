@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
               public sortService: SortService) { }
 
   ngOnInit() {
+    this.homeService.home = true;
     this.activeFilters = this.filterService.returnActiveFiltersList();
     this.filters = this.filterService.returnFilters();
     if (this.homeService.currentList) {

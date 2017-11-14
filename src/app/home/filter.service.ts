@@ -29,8 +29,7 @@ export class FilterService {
         '30 - 100 millions',
         '100 - 200 millions',
         '200 - 500 millions',
-        'more than 500 millions',
-        'custom range'
+        'more than 500 millions'
       ],
       filterKeys: [
         { min: 0, max: 10000000000},

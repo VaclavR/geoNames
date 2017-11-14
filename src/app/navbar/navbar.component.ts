@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Country } from '../Shared/country.model';
 import { HomeService } from '../home/home.service';
 import { Router } from '@angular/router';
@@ -33,6 +33,23 @@ export class NavbarComponent implements OnInit {
           }
         });
       });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.homeService.home) {
+      if (event.keyCode === 37) {
+        this.onLoadCountry('prev');
+      }
+      if (event.keyCode === 39) {
+        this.onLoadCountry('next');
+      }
+    }
+  }
+
+  onLoadCountry(direction: string) {
+    this.homeService.returnNextOrPrevCountry(direction);
+    this.router.navigate(['/country', this.homeService.countryCode]);
   }
 
   onSearch() {
