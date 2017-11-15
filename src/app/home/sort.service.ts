@@ -20,7 +20,7 @@ export class SortService {
 
   toggleSortBy(key: string, currentList: Country[], dontToggle?: boolean): Country[] {
     let sortedList: Country[] = [];
-    // Number sort
+    // Number sorting
     if (key === 'population' || key === 'areaInSqKm' || key === 'density') {
       if (!dontToggle) {
         this.sortDirection09[key] = !this.sortDirection09[key];
@@ -37,7 +37,7 @@ export class SortService {
         sortedList = currentList.sort(this.sortFunction90.bind(null, key));
       }
     } else {
-      // Letter sort
+      // Letter sorting
       if (!dontToggle) {
         this.sortDirectionAZ[key] = !this.sortDirectionAZ[key];
       }
