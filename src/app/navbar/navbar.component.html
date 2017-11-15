@@ -7,18 +7,17 @@
 
     </ul>
     <form class="form-inline my-2 my-lg-0"
-          [formGroup]="searchForm" (ngSubmit)="onSearch()"
+          [formGroup]="searchForm"
           *ngIf="countries">
       <span class="nav-item" *ngIf="!homeService.home" (click)="onLoadCountry('prev')">
-        <a class="nav-link arrow">
-          <i class="fa fa-arrow-circle-o-left fa-lg" aria-hidden="true"></i>
+        <a class="arrow">
+          <i class="fa fa-arrow-circle-left fa-2x" aria-hidden="true"></i>
         </a>
       </span>
       <input  formControlName="country"
-              (change)="onSearch()"
               (input)="onInput()"
               autofocus
-              class="form-control"
+              class="form-control short"
               type="text"
               [placeholder]=placeholder
               aria-label="Search"
@@ -26,8 +25,8 @@
               [typeaheadOptionField]="'countryName'"
               [typeaheadGroupField]="'continentName'">
       <span class="nav-item" *ngIf="!homeService.home" (click)="onLoadCountry('next')">
-        <a class="nav-link arrow">
-          <i class="fa fa-arrow-circle-o-right fa-lg" aria-hidden="true"></i>
+        <a class="arrow">
+          <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
         </a>
       </span>
     </form>

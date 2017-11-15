@@ -5,6 +5,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { ResponsiveModule } from 'ng2-responsive';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -27,6 +28,7 @@ import { ShortenPipe } from './shorten.pipe';
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ResponsiveModule,
     BsDropdownModule.forRoot(),
     TypeaheadModule.forRoot(),
     AppRoutingModule

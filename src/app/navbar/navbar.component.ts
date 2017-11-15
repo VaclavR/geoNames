@@ -11,7 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class NavbarComponent implements OnInit {
   searchForm: FormGroup;
-  placeholder = 'Enter a country name';
+  placeholder = 'country name';
   countries: Country[];
   private countryCode: string;
 
@@ -50,19 +50,6 @@ export class NavbarComponent implements OnInit {
   onLoadCountry(direction: string) {
     this.homeService.returnNextOrPrevCountry(direction);
     this.router.navigate(['/country', this.homeService.countryCode]);
-  }
-
-  onSearch() {
-    if (this.searchForm.valid) {
-      this.findCountry(this.searchForm.value.country);
-      this.searchForm.reset();
-    } else {
-      this.searchForm.reset();
-      this.placeholder = 'Unknown Country!';
-      setTimeout(() => {
-        this.placeholder = 'Enter a country name';
-      }, 1000);
-    }
   }
 
   onInput() {

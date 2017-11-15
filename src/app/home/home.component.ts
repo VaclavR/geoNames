@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
     population: false,
     areaInSqKm: false
   };
+  currentSortKey = 'countryName';
   filters: Filter[];
   activeFilters: string[];
   countries: Country[];
@@ -54,10 +55,12 @@ export class HomeComponent implements OnInit {
 
   filterBy(keys: Keys) {
     this.currentList = this.filterService.newFilterFunction(keys);
+    this.currentList = this.sortService.toggleSortBy(this.currentSortKey, this.currentList, true);
     this.activeFilters = this.filterService.returnActiveFiltersList();
   }
 
   toggleSortBy(key: string) {
+    this.currentSortKey = key;
     Object.entries(this.showSortArrow).forEach(
       ([arrow]) => {
         this.showSortArrow[arrow] = arrow === key;

@@ -18,11 +18,13 @@ export class SortService {
 
   constructor(private homeService: HomeService) {}
 
-  toggleSortBy(key: string, currentList: Country[]): Country[] {
+  toggleSortBy(key: string, currentList: Country[], dontToggle?: boolean): Country[] {
     let sortedList: Country[] = [];
     // Number sort
     if (key === 'population' || key === 'areaInSqKm' || key === 'density') {
-      this.sortDirection09[key] = !this.sortDirection09[key];
+      if (!dontToggle) {
+        this.sortDirection09[key] = !this.sortDirection09[key];
+      }
       if (key === 'density') {
         if (this.sortDirection09[key]) {
           sortedList = currentList.sort(this.sortDensity09.bind(null, ['population', 'areaInSqKm']));
@@ -36,7 +38,9 @@ export class SortService {
       }
     } else {
       // Letter sort
-      this.sortDirectionAZ[key] = !this.sortDirectionAZ[key];
+      if (!dontToggle) {
+        this.sortDirectionAZ[key] = !this.sortDirectionAZ[key];
+      }
       if (this.sortDirectionAZ[key]) {
         sortedList = currentList.sort(this.sortFunctionAZ.bind(null, key));
       } else {

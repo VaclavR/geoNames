@@ -2,6 +2,18 @@
   cursor: not-allowed;
 }
 
+a.arrow:first-child {
+  padding-right: 7px;
+}
+
+a.arrow:last-child {
+  padding-left: 7px;
+}
+
 a.arrow:hover {
   color: chartreuse;
+}
+
+input.short {
+  width: 127px;
 }
